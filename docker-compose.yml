@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+    app:
+        container_name: app
+        build:
+            context: .
+        env_file: app/.env
+        depends_on:
+            - mysql
+        volumes:
+            - ./app:/var/www:rw,cached
+            - ./app/public:/var/www/public:rw,delegated
+        ports:
+            - "8080:8080"
+    
+    mysql:
+        container_name: database
+        image: percona:5.7
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-nopassword}
+            - MYSQL_DATABASE=app
+            - MYSQL_USER=app
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-nopassword}
+        volumes:
+            - database:/var/lib/mysql:rw,delegated
+        ports:
+            - "3306:3306"
+
+volumes:
+    database:

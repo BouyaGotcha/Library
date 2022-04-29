@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Book;
 use App\Repository\BookRepository;
 
 class BookService
@@ -19,11 +20,21 @@ class BookService
     }
 
     /**
+     * @param array $filters
      * @return array
      */
-    public function getBooks(): array
+    public function getBooks(array $filters = []) : array
     {
-        return $this->bookRepository->findAll();
+        return $this->bookRepository->findAll($filters);
+    }
+
+    /**
+     * @param int $id
+     * @return Book|null
+     */
+    public function getBook(int $id): ?Book
+    {
+        return $this->bookRepository->find($id);
     }
 
 }

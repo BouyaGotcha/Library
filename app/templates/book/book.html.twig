@@ -1,0 +1,8 @@
+{# templates/book/book.html.twig #}
+
+<tr>
+    <td><a href="{{ path('book', {id: book.id}) }}">{{ book.title }}</a></td>
+    <td><a href="{{ path('author', {slug: book.author}) }}">{{ book.author }}</a></td>
+    <td><a href="{{ path('date', {date: book.publishingDate}) }}">{{ book.publishingDate }}</a></td>
+    <td><a href="{{ path('category', {slug: book.category}) }}">{{ book.category }}</a></td>
+</tr>

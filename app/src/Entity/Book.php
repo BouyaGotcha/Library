@@ -14,16 +14,16 @@ class Book
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $author;
+    private ?string $author;
 
-    #[ORM\Column(type: 'datetime')]
-    private $publishing_date;
+    #[ORM\Column(type: 'integer')]
+    private ?int $publishing_date;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $category;
+    private ?string $category;
 
     public function getId(): ?int
     {
@@ -54,12 +54,12 @@ class Book
         return $this;
     }
 
-    public function getPublishingDate(): ?\DateTimeInterface
+    public function getPublishingDate(): ?int
     {
         return $this->publishing_date;
     }
 
-    public function setPublishingDate(\DateTimeInterface $publishing_date): self
+    public function setPublishingDate(int $publishing_date): self
     {
         $this->publishing_date = $publishing_date;
 

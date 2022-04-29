@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\BookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,36 +17,74 @@ class BookController extends AbstractController
     /**
      * @param BookService $service
      */
-    public function __construct(BookService $service){
+    public function __construct(BookService $service)
+    {
         $this->service = $service;
     }
 
     /**
      * @Route("/books", name="books")
-     *
      * @return Response
      */
     public function index(): Response
     {
-        dd($this->service->getBooks());
+        return $this->render('book/list.html.twig', [
+            'books' => $this->service->getBooks()
+        ]);
     }
 
-    public function book()
+    /**
+     * @Route ("/books/{id}", name="book")
+     * @param int $id
+     * @return Response
+     */
+    public function book(int $id): Response
+    {
+        $book = $this->service->getBook($id);
+
+        if(is_null($book)){
+            return new Response('Book not found', Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render('book/list.html.twig', [
+            'books' => [$book]
+        ]);
+    }
+
+    /**
+     * @Route ("/authors/{slug}", name="author")
+     * @param string $slug
+     * @return Response
+     */
+    public function author(string $slug): Response
+    {
+        $books = $this->service->getBooks(['author' => $slug]);
+
+        if(empty($books)){
+            return new Response('No books found for author : ' . $slug, Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render('book/list.html.twig', [
+            'books' => [$books]
+        ]);
+    }
+
+    /**
+     * @Route ("/dates/{date}", name="date")
+     * @param integer $date
+     * @return Response
+     */
+    public function publishingDate(int $date): Response
     {
 
     }
 
-    public function author()
-    {
-
-    }
-
-    public function publishingDate()
-    {
-
-    }
-
-    public function category()
+    /**
+     * @Route ("/categories/{slug}", name="category")
+     * @param string $slug
+     * @return Response
+     */
+    public function category(string $slug): Response
     {
 
     }

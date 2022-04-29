@@ -23,9 +23,9 @@ class BookService
      * @param array $filters
      * @return array
      */
-    public function getBooks(array $filters = []) : array
+    public function getBooks(array $filters = []): array
     {
-        return $this->bookRepository->findAll($filters);
+        return $this->bookRepository->findBy($filters);
     }
 
     /**

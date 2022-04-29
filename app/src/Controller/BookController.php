@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Service\BookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,8 +41,8 @@ class BookController extends AbstractController
     {
         $book = $this->service->getBook($id);
 
-        if(is_null($book)){
-            return new Response('Book not found', Response::HTTP_NOT_FOUND);
+        if (is_null($book)) {
+            return new Response('Book not found with id : ' . $id, Response::HTTP_NOT_FOUND);
         }
 
         return $this->render('book/list.html.twig', [
@@ -60,12 +59,12 @@ class BookController extends AbstractController
     {
         $books = $this->service->getBooks(['author' => $slug]);
 
-        if(empty($books)){
+        if (empty($books)) {
             return new Response('No books found for author : ' . $slug, Response::HTTP_NOT_FOUND);
         }
 
         return $this->render('book/list.html.twig', [
-            'books' => [$books]
+            'books' => $books
         ]);
     }
 
@@ -76,7 +75,15 @@ class BookController extends AbstractController
      */
     public function publishingDate(int $date): Response
     {
+        $books = $this->service->getBooks(['publishing_date' => $date]);
 
+        if (empty($books)) {
+            return new Response('No books found published in : ' . $date, Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render('book/list.html.twig', [
+            'books' => $books
+        ]);
     }
 
     /**
@@ -86,7 +93,15 @@ class BookController extends AbstractController
      */
     public function category(string $slug): Response
     {
+        $books = $this->service->getBooks(['category' => $slug]);
 
+        if (empty($books)) {
+            return new Response('No books found for category : ' . $slug, Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render('book/list.html.twig', [
+            'books' => $books
+        ]);
     }
 
 }

@@ -22,6 +22,7 @@ if [ "$APP_ENV" != 'test' ]; then
 	until bin/console doctrine:query:sql "select 1" >/dev/null 2>&1; do
 		(>&2 echo "Waiting for MySQL to be ready...")
 		sleep 1
+		bin/console doctrine:database:create
 	done
 
 	if [ "$(ls -A migrations/*.php 2> /dev/null)" ]; then
